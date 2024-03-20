@@ -108,7 +108,7 @@ function getNextFriday(date) {
  */
 function getCountDaysInMonth(month, year) {
   const specifiedDate = new Date(year, month);
-  return specifiedDate.getUTCDate();
+  return specifiedDate.getDate();
 }
 
 /**
