@@ -122,10 +122,11 @@ function getCountDaysInMonth(month, year) {
  * '2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z'  => 2
  * '2024-02-01T00:00:00.000Z', '2024-02-12T00:00:00.000Z'  => 12
  */
+const msInFullDay = 86400000;
 function getCountDaysOnPeriod(dateStart, dateEnd) {
   const fromDateTime = new Date(dateStart).getTime();
   const toDateTime = new Date(dateEnd).getTime();
-  return parseInt((toDateTime - fromDateTime) / 86400000, 10) + 1;
+  return parseInt((toDateTime - fromDateTime) / msInFullDay, 10) + 1;
 }
 
 /**
@@ -218,8 +219,13 @@ function getCountWeekendsInMonth(month, year) {
  * Date(2024, 0, 31) => 5
  * Date(2024, 1, 23) => 8
  */
-function getWeekNumberByDate(/* date */) {
-  throw new Error('Not implemented');
+function getWeekNumberByDate(date) {
+  const startDate = new Date(date.getFullYear(), 0, 0);
+  return Math.ceil(
+    (Math.ceil((date.getTime() - startDate.getTime()) / msInFullDay) +
+      startDate.getDay()) /
+      7
+  );
 }
 
 /**
