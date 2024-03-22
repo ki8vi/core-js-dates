@@ -282,8 +282,36 @@ function getQuarter(date) {
  * { start: '01-01-2024', end: '15-01-2024' }, 1, 3 => ['01-01-2024', '05-01-2024', '09-01-2024', '13-01-2024']
  * { start: '01-01-2024', end: '10-01-2024' }, 1, 1 => ['01-01-2024', '03-01-2024', '05-01-2024', '07-01-2024', '09-01-2024']
  */
-function getWorkSchedule(/* period, countWorkDays, countOffDays */) {
-  throw new Error('Not implemented');
+function getWorkSchedule(period, countWorkDays, countOffDays) {
+  const [startD, startM, startY] = period.start.split('-');
+  const [endD, endM, endY] = period.end.split('-');
+  const fromDate = new Date(`${startY}-${startM}-${startD}`);
+  const toDate = new Date(`${endY}-${endM}-${endD}`);
+  const range = countWorkDays + countOffDays;
+  const duration = (toDate - fromDate) / msInFullDay;
+  const arbaytDays = [];
+  let counterOfArbaytDays = 0;
+
+  for (let i = 0; i <= duration; i += 1) {
+    if (countWorkDays > counterOfArbaytDays) {
+      const dd =
+        fromDate.getUTCDate() < 10
+          ? `0${fromDate.getUTCDate()}`
+          : `${fromDate.getUTCDate()}`;
+      const mm =
+        fromDate.getUTCMonth() + 1 < 10
+          ? `0${fromDate.getUTCMonth() + 1}`
+          : `${fromDate.getUTCMonth() + 1}`;
+      const arbaitDay = `${dd}-${mm}-${fromDate.getUTCFullYear()}`;
+      arbaytDays.push(arbaitDay);
+    }
+    counterOfArbaytDays += 1;
+    if (counterOfArbaytDays === range) {
+      counterOfArbaytDays = 0;
+    }
+    fromDate.setUTCDate(fromDate.getUTCDate() + 1);
+  }
+  return arbaytDays;
 }
 
 /**
